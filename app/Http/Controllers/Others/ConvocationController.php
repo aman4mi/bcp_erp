@@ -64,10 +64,10 @@ class ConvocationController extends Controller
 
         if ($request->file()) {
             $moneyRecFileName = ($request->file('money_rec_file') != null) ? time() . '_mrf_' . $request->fellow_id . '_' . $request->file('money_rec_file')->getClientOriginalName() : " ";
-            $moneyRecFilePath = ($request->file('money_rec_file') != null) ? $request->file('money_rec_file')->storeAs('uploads/jubilee', $moneyRecFileName, 'public') : " ";
+            $moneyRecFilePath = ($request->file('money_rec_file') != null) ? $request->file('money_rec_file')->storeAs('uploads/convocation', $moneyRecFileName, 'public') : " ";
 
             $imgUpFileName = ($request->file('img_up_file') != null) ? time() . '_iuf_' . $request->fellow_id . '_' . $request->file('img_up_file')->getClientOriginalName() : " ";
-            $imgUpFilePath = ($request->file('img_up_file') != null) ? $request->file('img_up_file')->storeAs('uploads/jubilee', $imgUpFileName, 'public') : " ";
+            $imgUpFilePath = ($request->file('img_up_file') != null) ? $request->file('img_up_file')->storeAs('uploads/convocation', $imgUpFileName, 'public') : " ";
         }
 
         $file_id = DB::table('convocation_guests')->insertGetId([
