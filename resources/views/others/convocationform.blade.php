@@ -29,6 +29,7 @@
 
         <div class="container">
             <img src="{{ asset('public/images/convocation_header.jpg'); }}" alt="BCPS" width="100%" height="150" />
+            <h3 class="text-center p-1 text-danger border rounded fst-italic">Registration Form</h3>
         </div>
 
     </header>
@@ -116,7 +117,7 @@
 
                     <div class="col">
                         <div class="form-floating mb-1">
-                            <input type="text" class="form-control" name="candidate_name" id="candidate_name" value=""
+                            <input type="text" class="form-control text-uppercase" name="candidate_name" id="candidate_name" value=""
                                 required maxlength="250">
                             <label for="candidate_name">Name (Capital Letter) <sup class="text-danger"
                                     style="font-weight: bold;">*</sup> </label>
@@ -170,10 +171,15 @@
 
                 <div class="row mt-2 ms-1 me-1">
                     <div class="p-2 border border-danger border-2 rounded">
-                        <!--<h5> Registration Fee</h5> -->
+                        <!--<h3> Registration Fee: 11000 BDT</h5> -->
 
                         <table class="table table-striped">
                             <thead>
+                            <tr>
+                                    <th scope="col" width="80%">Registration Fee</th>
+                                    <th scope="col" width="20%">11000 BDT</th>
+                                </tr>
+
                                 <tr>
                                     <th scope="col" width="80%">Option</th>
                                     <th scope="col" width="20%">Yes</th>
@@ -182,19 +188,19 @@
                             <tbody>
                                 <tr>
                                     <td>Accompanied By Spouse/One Guardian</td>
-                                    <td><input class="form-check-input" type="checkbox" value="" name="is_spouse_chk"
+                                    <td><input class="form-check-input" type="checkbox" value="on" name="is_spouse_chk"
                                             id="is_spouse_chk" onchange="billingDeal()">
                                     </td>
                                 </tr>
                                 <tr>
                                     <td>Original Certificate received before?</td>
-                                    <td><input class="form-check-input roleClass" type="checkbox" value=""
+                                    <td><input class="form-check-input roleClass" type="checkbox" value="on"
                                             name="is_origin_cert_rec" id="is_origin_cert_rec">
                                     </td>
                                 </tr>
                                 <tr>
                                     <td>Provesional Certificate received before?</td>
-                                    <td><input class="form-check-input roleClass" type="checkbox" value=""
+                                    <td><input class="form-check-input roleClass" type="checkbox" value="on"
                                             name="is_prov_cert_rec" id="is_prov_cert_rec">
                                     </td>
                                 </tr>
@@ -204,7 +210,7 @@
                             <tfoot>
                                 <tr class="table-success">
                                     <th>
-                                        <h5>Your Registration Fee:</h5>
+                                        <h5 id = "reg_fee_text">Your Registration Fee: </h5>
                                     </th>
                                     <th>
                                         <h5><label id="totalAmount" style="color: #ff0000">11000 BDT</label></h5>
@@ -256,7 +262,7 @@
                             <div class="form-floating mb-1">
                                 <select class="form-select" name="payment_mode" id="payment_mode" required onchange=""
                                     aria-label="Floating label select example">
-                                    <option selected value="online">Online</option>
+                                    <option selected value="online">Online (Agrani Bank - A/C No: 0200002426749)</option>
                                     <option value="bankdraft">Bank Draft</option>
                                     <option value="payorder">Pay Order</option>
                                 </select>
@@ -267,7 +273,7 @@
                         <div class="col">
                             <div class="form-floating mb-1">
                                 <input type="text" class="form-control" name="money_receipt_no" id="money_receipt_no"
-                                    value=""  maxlength="250">
+                                    value="" maxlength="250">
                                 <label for="money_receipt_no">Transaction/Money Receipt No.<sup class="text-danger"
                                         style="font-weight: bold;">*</sup></label>
                             </div>
@@ -322,8 +328,7 @@
                         <div class="col">
                             <div class="mb-3">
                                 <label for="formFileSm" class="form-label">Participant Picture <sup class="text-danger"
-                                        style="font-weight: bold;">*</sup><label
-                                        class="text-danger">
+                                        style="font-weight: bold;">*</sup><label class="text-danger">
                                         (Image must be .jpg &
                                         size: 300x300)</label></label>
                                 <input class="form-control form-control-sm" name="img_up_file" id="img_up_file"
@@ -343,21 +348,18 @@
 
         <script>
             var date = new Date();
-            var formattedDate = date.getDate()+"/"+date.getMonth()+"/"+date.getFullYear();
+
+            let mn = parseInt(date.getMonth())+1;
+            mn = mn.toString().length==1 ? '0' + mn : mn;
+            var formattedDate = date.getDate()+"/"+mn+"/"+date.getFullYear();
             var currency = " BDT";
             var initialAmount = 11000;
             $("#reg_fee").val(initialAmount);
-            //$("#date_submission").val(formattedDate);
+            $("#date_submission").val(formattedDate);
             var isOriginalChecked = false;
 
             $(document).ready(function () {
-                $('#date_submission').datepicker();
-
-                $("#date_submission").datepicker({
-                    dateFormat: "yy-mm-dd"
-                });
-
-
+        
                 getSubject("FCPS");
             });
 
@@ -401,25 +403,41 @@
                     totalAmount = initialAmount + spouseAmount;
                     $('#spouse_name').prop('readonly', false);
                     $('#spouse_relation').prop('readonly', false);
+
+                    $('#reg_fee_text').text("Your Registration Fee (With Accompanying Person) :");
+
                 } else {
                     spouseAmount = 0;
                     totalAmount = initialAmount + spouseAmount;
                     $('#spouse_name').prop('readonly', true);
                     $('#spouse_relation').prop('readonly', true);
+                    $('#reg_fee_text').text("Your Registration Fee :");
                 }
  
                 if ($('#is_prov_cert_rec').is(':checked')) {
                     initialAmount = 4000;
                     totalAmount = initialAmount + spouseAmount;
 
+                    $('#bank_name').prop('readonly', false);
+                    $('#bank_branch').prop('readonly', false);
+                    $('#money_receipt_no').prop('readonly', false);
+
                 } else if ($('#is_origin_cert_rec').is(':checked')) {
 
                     initialAmount = 0;
                     totalAmount = initialAmount + spouseAmount;
                     isOriginalChecked = true;
+
+                    $('#bank_name').prop('readonly', true);
+                    $('#bank_branch').prop('readonly', true);
+                    $('#money_receipt_no').prop('readonly', true);
+
                 } else {
                     initialAmount = 11000;
                     totalAmount = initialAmount + spouseAmount;
+                    $('#bank_name').prop('readonly', false);
+                    $('#bank_branch').prop('readonly', false);
+                    $('#money_receipt_no').prop('readonly', false);
                 }
 
                 $('#totalAmount').text(totalAmount + currency);
@@ -431,31 +449,59 @@
                 var subject_id_val = $('#subject_id').val();
 
                 if(initialAmount != 0){
-                    if (!$('#money_receipt_no').val()) {
-                        alert("Transaction/Money Receipt No. Can't be Empty.");
+                    if (!$('#bank_name').val()) {
+                    altMsg("Bank Name", 1);
+                    return false;
+                    } else if (!$('#bank_branch').val()) {
+                    altMsg("Branch Name", 1);
+                    return false;
+                    } else if (!$('#money_receipt_no').val()) {
+                        altMsg("Transaction/Money Receipt No.", 1);
                         return false;
                     } else if ($('#money_rec_file').get(0).files.length === 0) {
-                        alert("No Money Receipt Image is selected.");
+                        altMsg("Money Receipt Image", 2);
                         return false;
                     }
                 }
         
                  else if (!$('#fellow_id').val()) {
-                    alert("Fellow Id or Member Id Can't be Empty.");
+                    altMsg("Fellow Id or Member Id", 1);
                     return false;
-                } else if (!$('#subject_id').val()) {
-                    alert("Subject Can't be Empty.");
+                } else if (!$('#candidate_name').val()) {
+                    altMsg("Name", 1);
                     return false;
-                } else if (!$('#bank_branch').val()) {
-                    alert("Branch Name Can't be Empty.");
+                } else if (!$('#father_name').val()) {
+                    altMsg("Father/Spouse Name", 1);
+                    return false;
+                } else if (!$('#mailing_addr').val()) {
+                    altMsg("Address of communication", 1);
+                    return false;
+                } else if (!$('#mobile').val()) {
+                    altMsg("Mobile No. Name", 1);
+                    return false;
+                } else if (!$('#email').val()) {
+                    altMsg("Email Name", 1);
+                    return false;
+                }else if (!$('#subject_id').val()) {
+                    altMsg("Subject Name", 1);
                     return false;
                 } else if ($('#img_up_file').get(0).files.length === 0) {
-                    alert("No Participant Image is selected.");
+                    altMsg("Participant Image", 2);
                     return false;
                 }
                 else {
                     return confirm('Do you want to save?');
                 }
+            }
+
+            function altMsg(msgBody, optn){
+                var extmsg = "";
+                if(optn == 1){
+                    extmsg = " Can't be Empty.";
+                }else if(optn == 2){
+                    extmsg = " Not Selected.";
+                }
+              return alert(msgBody+""+extmsg);
             }
 
             $("input[name='mem_fellow_radio']").on("change", function () {
@@ -505,13 +551,13 @@
                                     var width = this.width;
                                     if (opt1 == 1) {
                                         if (height > 300 || width > 600) {
-                                            alert("Height and Width must be 300px X 600px.");
+                                            alert("Width & Height must be 600px X 300px.");
                                             oInput.value = "";
                                             return false;
                                         }
                                     } else if (opt1 == 2) {
                                         if (height > 300 || width > 300) {
-                                            alert("Height and Width must be 300px X 300px");
+                                            alert("Width & Height must be 300px X 300px");
                                             oInput.value = "";
                                             return false;
                                         }

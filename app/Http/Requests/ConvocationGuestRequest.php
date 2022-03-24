@@ -30,8 +30,6 @@ class ConvocationGuestRequest extends FormRequest
             'mailing_addr' => 'required|max:255' ,
             'mobile'  => 'required|max:15' ,
             'email' => 'required|max:255' ,
-            'bank_name'  => 'required|max:255' ,
-            'bank_branch' => 'required|max:255' ,
             'img_up_file' => 'required|max:500' ,
         ];
     }
