@@ -331,7 +331,7 @@
                 </div>
 
                 <div class="text-center p-2">
-                    <button type="submit" class="btn btn-primary">Save</button>
+                    <button type="submit" class="btn btn-primary">Submit</button>
                 </div>
             </form>
 
@@ -344,7 +344,6 @@
             var initialAmount = 2000;
             var callSpouseAmount = 2000;
             // var callSpouseAmount = $('#spouseAmount').text().split(" ")[0];
-
             var spouseAmount = parseInt(callSpouseAmount);
             var currentMonth = date.getMonth();
             var currentYear = date.getFullYear();
